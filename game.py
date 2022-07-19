@@ -4,7 +4,7 @@ import numpy as np
 from functions import *
 from variables import *
 
-board = np.zeros((HEIGHT, LENGTH), dtype=int)
+create_board()
 
 def main():
     print(board + \)
@@ -17,19 +17,22 @@ def main():
           'either horizontally, vertically or diagonally wins.')
 
     game = False
+
     while game == False:
 
-        # X player
-        board, Stacks = move('X',board,Stacks,computer1)
-        printBoard(board)
-        game = checkWin('X',board)
-        if game == True:
-            break
+        # Player 1
+        if turn == 0:
+            board, Stacks = move('X',board,Stacks,computer1)
+            printBoard(board)
+            game = win_conditions(board)
+            if game == True:
+                break
 
-        # O player
-        board, Stacks = move('O',board,Stacks,computer1)
-        printBoard(board)
-        game = checkWin('O',board)
-        if game == True:
-            break
+        # Player 2
+        if turn == 1:
+            board, Stacks = move('O',board,Stacks,computer1)
+            printBoard(board)
+            game = win_conditions(board)
+            if game == True:
+                break
     print('Good game.')

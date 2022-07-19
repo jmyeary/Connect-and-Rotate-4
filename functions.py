@@ -1,14 +1,14 @@
 import numpy as np
 from variables import *
 
-board = np.zeros((HEIGHT, LENGTH), dtype=int)
-board[6][1] = 1
-board[6][2] = 1
-
+def create_board():
+	board = np.zeros((HEIGHT, LENGTH), dtype=int)
+	return board
 
 def whose_turn(n=TURN):
     n += 1
-    return n % 2
+    n = n%2
+    return n
 
 
 def placement(col, state=board):
@@ -46,14 +46,14 @@ def win_conditions(state=board):
     # Vertical win check
     for i in range(LENGTH):
         if sum(state[:, i]) >= 4:
-            game = True
+            return True
         else:
             continue
 
     # Horizontal win check
     for i in range(HEIGHT):
         if sum(state[i, :]) >= 4:
-            game = True
+            return True
         else:
             continue
 
@@ -61,13 +61,9 @@ def win_conditions(state=board):
     for a in coordinates:
         # Descending diag check
         if (a[0] + 1 and a[0] + 2 and a[0] + 3) in rows and (a[1] + 1 and a[1] + 2 and a[1] + 3) in cols:
-            game = True
+            return True
         # Ascending diag check
         elif (a[0] + 1 and a[0] + 2 and a[0] + 3) in rows and (a[1] - 1 and a[1] - 2 and a[1] - 3) in cols:
-            game = True
+            return True
         else:
             continue
-
-    if game == True:
-        print(f"Congratulations! Player {(TURN + 1) % 2} wins!")
-    return game
