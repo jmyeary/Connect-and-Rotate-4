@@ -1,28 +1,30 @@
 import numpy as np
 from variables import *
 
-def create_board():
-	board = np.zeros((HEIGHT, LENGTH), dtype=int)
-	return board
 
-def whose_turn(n=TURN):
+def create_board():
+    board = np.zeros((HEIGHT, LENGTH), dtype=int)
+    return board
+
+
+def next_turn(n=TURN):
     n += 1
-    n = n%2
+    n = n % 2
     return n
 
 
-def placement(col, state=board):
+def placement(col, state):
     for i in range(LENGTH):
         if np.flip(state[:, col])[i] != 0:
             continue
         else:
             np.flip(state[:, col])[i] = 1
             break
-    whose_turn(TURN)
+    print(state)
     return state
 
 
-def rotate(state=board):
+def rotate(state):
     rotation = np.rot90(state)
     for i in range(LENGTH):
         count = sum(rotation[:, i])
@@ -33,26 +35,29 @@ def rotate(state=board):
             position -= 1
             count -= 1
     state = rotation
-    whose_turn(TURN)
+    print(state)
     return state
 
 
-def win_conditions(state=board):
-    game = False
+def win_conditions(state):
     rows = np.nonzero(state)[0]
     cols = np.nonzero(state)[1]
     coordinates = list(zip(rows, cols))
 
+
+
     # Vertical win check
     for i in range(LENGTH):
-        if sum(state[:, i]) >= 4:
+        vertical = np.diff(state[:, i])
+        if np.count_nonzero(vertical == 0) >= 3:
             return True
         else:
             continue
 
     # Horizontal win check
     for i in range(HEIGHT):
-        if sum(state[i, :]) >= 4:
+        horizontal = np.diff(state[i, :])
+        if np.count_nonzero(horizontal==0) >= 3:
             return True
         else:
             continue
